@@ -1,6 +1,6 @@
+import 'package:azulejo/app/modules/interview/page/interview/interview_store.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:azulejo/app/modules/interview/interview_store.dart';
- 
+
 void main() {
   late InterviewStore store;
 
@@ -8,9 +8,9 @@ void main() {
     store = InterviewStore();
   });
 
-  test('increment count', () async {
-    expect(store.value, equals(0));
-    store.increment();
-    expect(store.value, equals(1));
+  test('increment', () async {
+    expect(store.penalties, equals([0]));
+    store.addPenalty();
+    expect(store.penalties.length, equals(3));
   });
 }

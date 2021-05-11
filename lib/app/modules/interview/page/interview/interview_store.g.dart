@@ -3,24 +3,34 @@
 part of 'interview_store.dart';
 
 // **************************************************************************
+// InjectionGenerator
+// **************************************************************************
+
+final $InterviewStore = BindInject(
+  (i) => InterviewStore(),
+  isSingleton: true,
+  isLazy: true,
+);
+
+// **************************************************************************
 // StoreGenerator
 // **************************************************************************
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$InterviewStore on _InterviewStoreBase, Store {
-  final _$valueAtom = Atom(name: '_InterviewStoreBase.value');
+  final _$penaltiesAtom = Atom(name: '_InterviewStoreBase.penalties');
 
   @override
-  int get value {
-    _$valueAtom.reportRead();
-    return super.value;
+  List<Penalty> get penalties {
+    _$penaltiesAtom.reportRead();
+    return super.penalties;
   }
 
   @override
-  set value(int value) {
-    _$valueAtom.reportWrite(value, super.value, () {
-      super.value = value;
+  set penalties(List<Penalty> value) {
+    _$penaltiesAtom.reportWrite(value, super.penalties, () {
+      super.penalties = value;
     });
   }
 
@@ -28,11 +38,11 @@ mixin _$InterviewStore on _InterviewStoreBase, Store {
       ActionController(name: '_InterviewStoreBase');
 
   @override
-  void increment() {
+  void addPenalty() {
     final _$actionInfo = _$_InterviewStoreBaseActionController.startAction(
-        name: '_InterviewStoreBase.increment');
+        name: '_InterviewStoreBase.addPenalty');
     try {
-      return super.increment();
+      return super.addPenalty();
     } finally {
       _$_InterviewStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -41,7 +51,7 @@ mixin _$InterviewStore on _InterviewStoreBase, Store {
   @override
   String toString() {
     return '''
-value: ${value}
+penalties: ${penalties}
     ''';
   }
 }
