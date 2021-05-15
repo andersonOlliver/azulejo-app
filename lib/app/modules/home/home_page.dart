@@ -16,18 +16,25 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Counter'),
-      ),
-      body: Observer(
-        builder: (context) => Text('${store.counter}'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          store.increment();
-        },
-        child: Icon(Icons.add),
-      ),
-    );
+        body: Column(
+      children: [
+        Container(
+          padding: EdgeInsets.only(top: 40, bottom: 30),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFF193283), Color(0xFF142869)],
+            ),
+          ),
+          child: Center(
+            child: Text(
+              'Candidatos',
+              style: TextStyle(color: Colors.white, fontSize: 24),
+            ),
+          ),
+        ),
+      ],
+    ));
   }
 }
