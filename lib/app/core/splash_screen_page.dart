@@ -1,12 +1,14 @@
+import 'package:azulejo/app/core/database/seed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreenPage extends StatelessWidget {
   SplashScreenPage() {
-    Future.delayed(
-      Duration(seconds: 4),
-      () => Modular.to.pushReplacementNamed('/login'),
+    seed().then(
+      (value) => Future.delayed(
+        Duration(seconds: 4),
+        () => Modular.to.pushReplacementNamed('/login'),
+      ),
     );
   }
 
@@ -16,14 +18,19 @@ class SplashScreenPage extends StatelessWidget {
       color: Color(0xFF193283),
       child: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              'assets/logo-azulejo.svg',
-              semanticsLabel: 'Logotipo azulejo',
-              height: MediaQuery.of(context).size.height / 3,
-            ),
-            SizedBox(
-              height: (MediaQuery.of(context).size.height / 3) * 1,
+            Container(
+              height: MediaQuery.of(context).size.width,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: const Color(0xFF193283),
+                image: new DecorationImage(
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.1), BlendMode.dstATop),
+                    image: AssetImage('assets/logo-azulejo-branco.png')),
+              ),
             ),
             CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
