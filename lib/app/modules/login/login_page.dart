@@ -25,33 +25,50 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Azulejo',
-              style: TextStyle(
-                color: primaryColor,
-                fontWeight: FontWeight.w300,
-                fontSize: 48,
-              ),
-            ),
-          ),
-          Container(
-            child: Form(
-              key: _formKey,
+      body: LayoutBuilder(
+        builder: (context, constraint) => SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraint.maxHeight),
+            child: IntrinsicHeight(
               child: Column(
-                children: [
-                  _fieldEmail(),
-                  _fieldPassword(),
-                  _buttonSubmit(),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          'assets/azulejo-logo-maior.png',
+                          width: 150,
+                        ),
+                        Text(
+                          'Azulejo',
+                          style: TextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 40,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 32),
+                  Container(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          _fieldEmail(),
+                          _fieldPassword(),
+                          _buttonSubmit(),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
