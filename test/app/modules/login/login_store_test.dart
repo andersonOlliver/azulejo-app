@@ -1,16 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:azulejo/app/modules/login/login_store.dart';
- 
+import 'package:azulejo/app/modules/login/login_controller.dart';
+
 void main() {
-  late LoginStore store;
+  late LoginController store;
 
   setUpAll(() {
-    store = LoginStore();
+    store = LoginController();
   });
 
-  test('increment count', () async {
-    expect(store.value, equals(0));
-    store.increment();
-    expect(store.value, equals(1));
-  });
+  // test('increment count', () async {
+  //   expect(store.value, equals(0));
+  //   store.increment();
+  //   expect(store.value, equals(1));
+  // });
 }
