@@ -7,7 +7,7 @@ part of 'penalty_store.dart';
 // **************************************************************************
 
 final $PenaltyStore = BindInject(
-  (i) => PenaltyStore(),
+  (i) => PenaltyStore(i<PenaltyRepository>()),
   isSingleton: true,
   isLazy: true,
 );

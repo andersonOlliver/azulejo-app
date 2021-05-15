@@ -1,4 +1,5 @@
 import 'package:azulejo/app/modules/interview/page/penalty/penalty_store.dart';
+import 'package:azulejo/app/modules/interview/repository/penalty_repository.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'page/interview/interview_page.dart';
@@ -10,6 +11,7 @@ class InterviewModule extends Module {
   final List<Bind> binds = [
     $InterviewStore,
     $PenaltyStore,
+    $PenaltyRepository,
   ];
 
   @override
