@@ -1,11 +1,11 @@
-import 'package:azulejo/app/modules/interview/page/interview/interview_store.dart';
+import 'package:azulejo/app/modules/interview/page/interview/interview_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  late InterviewStore store;
+  late InterviewController store;
 
   setUpAll(() {
-    store = InterviewStore();
+    store = InterviewController();
   });
 
   test('increment', () async {

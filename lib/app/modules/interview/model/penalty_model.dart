@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
@@ -17,6 +18,10 @@ class Penalty extends HiveObject {
 
   @HiveField(2)
   final TypePenalty type;
+
+  String? get typeDescription => typePenaltyDescription[type];
+  int? get typeValue => typePenaltyValue[type];
+  Color? get typeColor => typePenaltyColor[type];
 
   Penalty({
     String? id,

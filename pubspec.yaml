@@ -18,6 +18,9 @@ dependencies:
   hive_flutter: ^1.0.0
   flutter_svg: ^0.22.0
   uuid: ^3.0.4
+  intl: ^0.17.0
+  flutter_localizations: # Add this line
+    sdk: flutter
 
 dev_dependencies:
   flutter_modular_test: ^1.0.1

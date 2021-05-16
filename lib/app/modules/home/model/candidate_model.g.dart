@@ -17,22 +17,28 @@ class CandidateAdapter extends TypeAdapter<Candidate> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Candidate(
-      name: fields[0] as String,
-      hasInterviewed: fields[2] as bool,
-      signature: fields[1] as String?,
+      name: fields[1] as String,
+      hasInterviewed: fields[3] as bool,
+      signature: fields[2] as String?,
+      id: fields[0] as String?,
+      penalties: (fields[4] as HiveList?)?.castHiveList(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Candidate obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.signature)
+      ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.hasInterviewed);
+      ..write(obj.signature)
+      ..writeByte(3)
+      ..write(obj.hasInterviewed)
+      ..writeByte(4)
+      ..write(obj.penalties);
   }
 
   @override

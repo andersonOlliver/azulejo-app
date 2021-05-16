@@ -17,7 +17,7 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
 
   @override
   void dispose() {
-    _formKey.currentState!.dispose();
+    _formKey.currentState?.dispose();
     passwordFocusNode.dispose();
     super.dispose();
   }

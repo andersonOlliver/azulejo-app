@@ -1,80 +1,84 @@
+import 'package:azulejo/app/modules/home/model/candidate_model.dart';
+import 'package:azulejo/app/modules/interview/components/iterview_timer/interview_timer_component.dart';
+import 'package:azulejo/app/modules/interview/model/penalty_model.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
 
-import 'interview_store.dart';
+import 'interview_controller.dart';
 
 class InterviewPage extends StatefulWidget {
-  final String title;
-  const InterviewPage({Key? key, this.title = 'InterviewPage'})
-      : super(key: key);
+  final Candidate candidate;
+  const InterviewPage({Key? key, required this.candidate}) : super(key: key);
   @override
   InterviewPageState createState() => InterviewPageState();
 }
 
-class InterviewPageState extends State<InterviewPage> {
-  final InterviewStore store = Modular.get();
+class InterviewPageState
+    extends ModularState<InterviewPage, InterviewController> {
+  @override
+  void initState() {
+    controller.setCandidate(widget.candidate);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        // mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Container(
+      body: LayoutBuilder(
+        builder: (context, constraint) => SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraint.maxHeight),
             child: Column(
-              children: [
-                _header(),
-                _penaltList(),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [_header(), _penaltList()],
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Column(
+                    children: [
+                      _penaltyButton(),
+                      _finishButton(),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
-          Container(
-            child: Column(
-              children: [
-                _penaltyButton(),
-                _finishButton(),
-              ],
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
 
   Widget _header() {
     return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            "Nome do candidato",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.w400,
-              fontFamily: "Roboto",
-            ),
-          ),
-          SizedBox(
-            height: 71,
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              "1h 30min",
+      child: Observer(builder: (_) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              controller.candidate?.name ?? "Nome do candidato",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 14,
+                fontSize: 24,
                 fontWeight: FontWeight.w400,
                 fontFamily: "Roboto",
               ),
-              textAlign: TextAlign.right,
             ),
-          ),
-        ],
-      ),
+            SizedBox(
+              height: 71,
+            ),
+            InterviewTimer()
+          ],
+        );
+      }),
       width: double.infinity,
       padding: EdgeInsets.only(
         left: 37,
@@ -100,23 +104,48 @@ class InterviewPageState extends State<InterviewPage> {
   }
 
   Widget _penaltList() {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        ListTile(
-          title: Text('Cruzou os braços'),
-          subtitle: Text('Falta leve'),
-          trailing: Container(
-            child: Center(child: Text('1')),
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-                color: Color(0xff219653),
-                borderRadius: BorderRadius.circular(20)),
-          ),
-        )
-      ],
-    );
+    return Observer(builder: (_) {
+      return StreamBuilder(
+        stream: controller.penalties,
+        builder: (context, AsyncSnapshot<List<Penalty>> snapshot) {
+          if (!snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(child: Text('Nenhuma penalidade adicionada')),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              shrinkWrap: true,
+              physics: AlwaysScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                var model = snapshot.data![index];
+                return ListTile(
+                  title: Text(model.title),
+                  subtitle: Text('Falta ${model.typeDescription}'),
+                  trailing: Container(
+                    child: Center(
+                        child: Text(
+                      '${model.typeValue}',
+                      style: TextStyle(
+                          color: model.typeValue! < 4
+                              ? Colors.black
+                              : Colors.white),
+                    )),
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: model.typeColor,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+        },
+      );
+    });
   }
 
   Widget _finishButton() {
@@ -126,7 +155,7 @@ class InterviewPageState extends State<InterviewPage> {
         width: double.infinity,
         height: 50,
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: controller.finishInterview,
           child: Text(
             "Finalizar",
             style: TextStyle(fontWeight: FontWeight.w400),
@@ -143,9 +172,7 @@ class InterviewPageState extends State<InterviewPage> {
         width: double.infinity,
         height: 50,
         child: TextButton(
-          onPressed: () {
-            Modular.to.pushNamed('/penalty');
-          },
+          onPressed: () => controller.addPenalty(context),
           child: Text('Adicionar penalidade'),
           style: ButtonStyle(
             elevation: MaterialStateProperty.all(0),

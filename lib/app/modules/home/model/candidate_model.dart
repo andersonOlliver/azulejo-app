@@ -1,25 +1,36 @@
 import 'dart:convert';
 
+import 'package:azulejo/app/modules/interview/model/penalty_model.dart';
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
 part 'candidate_model.g.dart';
 
 @HiveType(typeId: 0)
 class Candidate extends HiveObject {
   @HiveField(0)
-  final String name;
+  late String id;
 
   @HiveField(1)
-  final String? signature;
+  final String name;
 
   @HiveField(2)
+  final String? signature;
+
+  @HiveField(3)
   final bool hasInterviewed;
 
-  Candidate({
-    required this.name,
-    required this.hasInterviewed,
-    this.signature,
-  });
+  @HiveField(4)
+  HiveList<Penalty>? penalties;
+
+  Candidate(
+      {required this.name,
+      required this.hasInterviewed,
+      this.signature,
+      String? id,
+      this.penalties}) {
+    this.id = id ?? Uuid().v4();
+  }
 
   Candidate copyWith({
     String? name,
@@ -40,6 +51,8 @@ class Candidate extends HiveObject {
       'hasInterviewed': hasInterviewed,
     };
   }
+
+  factory Candidate.empty() => Candidate(name: '', hasInterviewed: false);
 
   factory Candidate.fromMap(Map<String, dynamic> map) {
     return Candidate(
