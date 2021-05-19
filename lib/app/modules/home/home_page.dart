@@ -113,10 +113,9 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 var model = snapshot.data![index];
                 return ListTile(
                   title: Text(model.name),
-                  subtitle: Text('Sem assinatura'),
-                  trailing: Icon(
-                    Icons.edit_off,
-                  ),
+                  subtitle:
+                      !model.hasSignature ? Text('Sem assinatura') : Text(''),
+                  trailing: !model.hasSignature ? Icon(Icons.edit_off) : null,
                   onTap: () {
                     var route =
                         model.hasSignature ? '/interview' : '/signature';

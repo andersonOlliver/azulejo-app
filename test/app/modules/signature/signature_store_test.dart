@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:azulejo/app/modules/signature/signature_store.dart';
- 
+import 'package:azulejo/app/modules/signature/signature_controller.dart';
+
 void main() {
   late SignatureStore store;
 

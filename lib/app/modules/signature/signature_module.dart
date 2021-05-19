@@ -1,15 +1,15 @@
 import 'package:azulejo/app/modules/signature/signature_Page.dart';
-import 'package:azulejo/app/modules/signature/signature_store.dart';
+import 'package:azulejo/app/modules/signature/signature_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class SignatureModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind.lazySingleton((i) => SignatureStore()),
+    $SignatureController,
   ];
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute('/', child: (_, args) => SignaturePage()),
+    ChildRoute('/', child: (_, args) => SignaturePage(candidate: args.data)),
   ];
 }
