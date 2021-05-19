@@ -24,6 +24,8 @@ class Candidate extends HiveObject {
   @HiveField(4)
   HiveList<Penalty>? penalties;
 
+  bool get hasSignature => signature != null;
+
   Candidate(
       {required this.name,
       required this.hasInterviewed,
@@ -86,6 +88,6 @@ class Candidate extends HiveObject {
 
   @override
   String toString() {
-    return 'Candidate(id: $id, name: $name, signature: $signature, hasInterviewed: $hasInterviewed, penalties: $penalties)';
+    return 'Candidate(id: $id, name: $name, signature: $signature, hasSignature: $hasSignature, hasInterviewed: $hasInterviewed, penalties: $penalties)';
   }
 }

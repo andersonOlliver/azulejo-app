@@ -76,6 +76,17 @@ mixin _$InterviewController on _InterviewControllerBase, Store {
       ActionController(name: '_InterviewControllerBase');
 
   @override
+  void removePenalty(BuildContext context, Penalty penalty) {
+    final _$actionInfo = _$_InterviewControllerBaseActionController.startAction(
+        name: '_InterviewControllerBase.removePenalty');
+    try {
+      return super.removePenalty(context, penalty);
+    } finally {
+      _$_InterviewControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addPenalty(BuildContext context) {
     final _$actionInfo = _$_InterviewControllerBaseActionController.startAction(
         name: '_InterviewControllerBase.addPenalty');

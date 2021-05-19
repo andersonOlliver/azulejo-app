@@ -114,8 +114,13 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 return ListTile(
                   title: Text(model.name),
                   subtitle: Text('Sem assinatura'),
+                  trailing: Icon(
+                    Icons.edit_off,
+                  ),
                   onTap: () {
-                    Modular.to.pushNamed('/interview', arguments: model);
+                    var route =
+                        model.hasSignature ? '/interview' : '/signature';
+                    Modular.to.pushNamed(route, arguments: model);
                   },
                 );
               },
