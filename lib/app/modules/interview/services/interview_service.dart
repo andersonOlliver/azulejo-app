@@ -48,7 +48,8 @@ class InterviewService {
       await this._penaltyRepository.getBox(),
     );
     this.candidate!.penalties!.addAll(this._penalties);
-    await this._candidateRepository.update(this.candidate!);
+    var copy = this.candidate!.copyWith(hasInterviewed: true);
+    await this._candidateRepository.update(copy);
 
     this.init();
   }

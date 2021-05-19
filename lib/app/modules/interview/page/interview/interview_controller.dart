@@ -20,6 +20,9 @@ abstract class _InterviewControllerBase with Store {
   @observable
   Candidate? candidate;
 
+  @observable
+  bool isFinish = false;
+
   _InterviewControllerBase(this.interviewService) {
     penalties = this.interviewService.penalties;
     candidate = this.interviewService.candidate;
@@ -46,6 +49,7 @@ abstract class _InterviewControllerBase with Store {
   @action
   Future<void> finishInterview() async {
     await this.interviewService.finalize();
+    isFinish = true;
     Modular.to.pop();
   }
 }

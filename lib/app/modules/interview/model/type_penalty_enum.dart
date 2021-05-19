@@ -39,3 +39,18 @@ const typePenaltyColor = {
   TypePenalty.HIGH: Color(0xFFEB5757),
   TypePenalty.ELIMINATORY: Color(0xFF570808),
 };
+
+Color? getColorByValue(int value) {
+  if (value < 0) return typePenaltyColor[TypePenalty.LOW];
+  switch (value) {
+    case 0:
+    case 1:
+      return typePenaltyColor[TypePenalty.LOW];
+    case 2:
+      return typePenaltyColor[TypePenalty.MEDIUM];
+    case 3:
+      return typePenaltyColor[TypePenalty.HIGH];
+    default:
+      return typePenaltyColor[TypePenalty.ELIMINATORY];
+  }
+}

@@ -49,6 +49,21 @@ mixin _$InterviewController on _InterviewControllerBase, Store {
     });
   }
 
+  final _$isFinishAtom = Atom(name: '_InterviewControllerBase.isFinish');
+
+  @override
+  bool get isFinish {
+    _$isFinishAtom.reportRead();
+    return super.isFinish;
+  }
+
+  @override
+  set isFinish(bool value) {
+    _$isFinishAtom.reportWrite(value, super.isFinish, () {
+      super.isFinish = value;
+    });
+  }
+
   final _$finishInterviewAsyncAction =
       AsyncAction('_InterviewControllerBase.finishInterview');
 
@@ -86,7 +101,8 @@ mixin _$InterviewController on _InterviewControllerBase, Store {
   String toString() {
     return '''
 penalties: ${penalties},
-candidate: ${candidate}
+candidate: ${candidate},
+isFinish: ${isFinish}
     ''';
   }
 }

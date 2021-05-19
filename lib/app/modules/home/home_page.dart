@@ -1,8 +1,14 @@
+import 'package:azulejo/app/core/database/box_name.dart';
+import 'package:azulejo/app/modules/home/widgtes/to_interview_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'home_controller.dart';
+import 'model/candidate_model.dart';
+import 'widgtes/interview_list_widget.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -35,47 +41,76 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               ),
             ),
           ),
-          _toInterviewList(),
+          ToInterviewList(),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
                 Text('Entrevistados'),
                 Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text('João Pedro Paulo'), Icon(Icons.circle)],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [_interviewedList()],
+                // ),
+                // _interviewedList(),
+                InterviewList(),
               ],
             ),
           ),
+          Container()
         ],
       ),
     ));
   }
 
-  Widget _toInterviewList() => Observer(
-        builder: (context) {
-          if (controller.toInterview == null) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return ListView.builder(
-              shrinkWrap: true,
-              itemCount: controller.toInterview!.length,
-              itemBuilder: (context, index) {
-                var model = controller.toInterview![index];
-                return ListTile(
-                  title: Text(model.name),
-                  subtitle: Text('Sem assinatura'),
-                  onTap: () {
-                    Modular.to.pushNamed('/interview', arguments: model);
-                  },
-                );
-              },
-            );
-          }
-        },
-      );
+  // Widget _toInterviewList() => Observer(
+  //       builder: (context) {
+  //         if (controller.toInterview == null) {
+  //           return Center(
+  //             child: CircularProgressIndicator(),
+  //           );
+  //         } else {
+  //           return ListView.builder(
+  //             shrinkWrap: true,
+  //             itemCount: controller.toInterview!.length,
+  //             itemBuilder: (context, index) {
+  //               var model = controller.toInterview![index];
+  //               return ListTile(
+  //                 title: Text(model.name),
+  //                 subtitle: Text('Sem assinatura'),
+  //                 onTap: () {
+  //                   Modular.to.pushNamed('/interview', arguments: model);
+  //                 },
+  //               );
+  //             },
+  //           );
+  //         }
+  //       },
+  //     );
+
+  // Widget _interviewedList() => Observer(
+  //       builder: (context) {
+  //         if (controller.interviewed == null) {
+  //           return Center(
+  //             child: CircularProgressIndicator(),
+  //           );
+  //         } else {
+  //           return ListView.builder(
+  //             shrinkWrap: true,
+  //             itemCount: controller.interviewed!.length,
+  //             itemBuilder: (context, index) {
+  //               var model = controller.interviewed![index];
+  //               return ListTile(
+  //                 title: Text(model.name),
+  //                 trailing: Icon(
+  //                   Icons.circle,
+  //                   // color: ,
+  //                   // if(color: Ty,)
+  //                 ),
+  //               );
+  //             },
+  //           );
+  //         }
+  //       },
+  //     );
 }

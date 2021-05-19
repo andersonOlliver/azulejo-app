@@ -1,4 +1,5 @@
 import 'package:azulejo/app/core/database/box_name.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -26,6 +27,13 @@ class CandidateRepository {
         .values
         .where((element) => element.hasInterviewed == hasInterviewed)
         .toList();
+  }
+
+  Future<ValueListenable<Box<Candidate>>> list() async {
+    if (_box == null) {
+      await open();
+    }
+    return _box!.listenable();
   }
 
   Future<Candidate> update(Candidate candidate) async {

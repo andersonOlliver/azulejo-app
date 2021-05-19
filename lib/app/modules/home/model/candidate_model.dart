@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:azulejo/app/modules/interview/model/penalty_model.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
+
+import 'package:azulejo/app/modules/interview/model/penalty_model.dart';
 
 part 'candidate_model.g.dart';
 
@@ -32,18 +33,6 @@ class Candidate extends HiveObject {
     this.id = id ?? Uuid().v4();
   }
 
-  Candidate copyWith({
-    String? name,
-    String? signature,
-    bool? hasInterviewed,
-  }) {
-    return Candidate(
-      name: name ?? this.name,
-      signature: signature ?? this.signature,
-      hasInterviewed: hasInterviewed ?? this.hasInterviewed,
-    );
-  }
-
   Map<String, dynamic> toMap() {
     return {
       'name': name,
@@ -68,10 +57,6 @@ class Candidate extends HiveObject {
       Candidate.fromMap(json.decode(source));
 
   @override
-  String toString() =>
-      'Candidate(name: $name, signature: $signature, hasInterviewed: $hasInterviewed)';
-
-  @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
@@ -84,4 +69,23 @@ class Candidate extends HiveObject {
   @override
   int get hashCode =>
       name.hashCode ^ signature.hashCode ^ hasInterviewed.hashCode;
+
+  Candidate copyWith(
+      {String? id,
+      String? name,
+      String? signature,
+      HiveList<Penalty>? penalties,
+      bool? hasInterviewed}) {
+    return Candidate(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        signature: signature ?? this.signature,
+        penalties: penalties ?? this.penalties,
+        hasInterviewed: hasInterviewed ?? this.hasInterviewed);
+  }
+
+  @override
+  String toString() {
+    return 'Candidate(id: $id, name: $name, signature: $signature, hasInterviewed: $hasInterviewed, penalties: $penalties)';
+  }
 }

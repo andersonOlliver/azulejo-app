@@ -14,6 +14,8 @@ Future seedCandidates() async {
       Candidate(name: 'Hitokiri Battousai', hasInterviewed: false),
       Candidate(name: 'Shinji Ikari', hasInterviewed: false),
       Candidate(name: 'Edward Newgate', hasInterviewed: false),
+      Candidate(name: 'Edward um', hasInterviewed: false),
+      Candidate(name: 'Edward dois', hasInterviewed: false),
     ]);
   }
   candidateBox.close();
