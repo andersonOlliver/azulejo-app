@@ -9,12 +9,12 @@ import 'page/interview/interview_controller.dart';
 import 'page/penalty/penalty_page.dart';
 
 class InterviewModule extends Module {
-  @override
+  static List<Bind> exports = [$PenaltyRepository];
+
   final List<Bind> binds = [
     $InterviewController,
     $PenaltyController,
     $InterviewTimerController,
-    $PenaltyRepository,
     $InterviewService
   ];
 

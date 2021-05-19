@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:collection';
 
+import 'package:azulejo/app/modules/home/candidate_store.dart';
 import 'package:azulejo/app/modules/home/model/candidate_model.dart';
 import 'package:azulejo/app/modules/home/repository/candidate_repository.dart';
 import 'package:azulejo/app/modules/interview/model/penalty_model.dart';
@@ -15,6 +15,7 @@ part 'interview_service.g.dart';
 class InterviewService {
   final CandidateRepository _candidateRepository;
   final PenaltyRepository _penaltyRepository;
+  final CandidateStore _candidateStore;
   final _streamController = StreamController<List<Penalty>>();
   Stream<List<Penalty>> get penalties => _streamController.stream;
 
@@ -22,7 +23,11 @@ class InterviewService {
 
   List<Penalty> _penalties = [];
 
-  InterviewService(this._candidateRepository, this._penaltyRepository) {
+  InterviewService(
+    this._candidateRepository,
+    this._penaltyRepository,
+    this._candidateStore,
+  ) {
     init();
   }
 
@@ -43,6 +48,12 @@ class InterviewService {
     this._streamController.add(this._penalties);
   }
 
+  @action
+  removePenalty(Penalty penalty) {
+    this._penalties.remove(penalty);
+    this._streamController.add(this._penalties);
+  }
+
   finalize() async {
     this.candidate!.penalties = HiveList(
       await this._penaltyRepository.getBox(),
@@ -50,7 +61,8 @@ class InterviewService {
     this.candidate!.penalties!.addAll(this._penalties);
     var copy = this.candidate!.copyWith(hasInterviewed: true);
     await this._candidateRepository.update(copy);
-
+    await this._streamController.close();
     this.init();
+    await this._candidateStore.init();
   }
 }

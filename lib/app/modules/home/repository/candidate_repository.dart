@@ -36,6 +36,13 @@ class CandidateRepository {
     return _box!.listenable();
   }
 
+  Future<List<Candidate>> listAll() async {
+    if (_box == null) {
+      await open();
+    }
+    return _box!.values.toList();
+  }
+
   Future<Candidate> update(Candidate candidate) async {
     await open();
     var registered =

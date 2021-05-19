@@ -20,6 +20,9 @@ abstract class _PenaltyControllerBase with Store {
   @observable
   TypePenalty? type;
 
+  @observable
+  bool isEditing = false;
+
   _PenaltyControllerBase(this._penaltyRepository, this._interviewService);
 
   @action
@@ -34,10 +37,22 @@ abstract class _PenaltyControllerBase with Store {
   }
 
   @action
+  void updatePenalty(String value, Penalty penalty) {
+    var copy = penalty.copyWith(title: value);
+    this._penaltyRepository.update(copy);
+    // this.edit();
+  }
+
+  @action
   void addPenalty(Penalty penalty) {
     print(penalty);
     this._interviewService.addPenalty(penalty);
     print('sadf');
     Modular.to.pop();
+  }
+
+  @action
+  void edit() {
+    this.isEditing = !this.isEditing;
   }
 }

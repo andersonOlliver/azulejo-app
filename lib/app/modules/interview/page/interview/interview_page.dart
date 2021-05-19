@@ -36,7 +36,10 @@ class InterviewPageState
                 Container(
                   child: SingleChildScrollView(
                     child: Column(
-                      children: [_header(), _penaltList()],
+                      children: [
+                        _header(),
+                        _penaltList(),
+                      ],
                     ),
                   ),
                 ),
@@ -120,23 +123,29 @@ class InterviewPageState
               physics: AlwaysScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 var model = snapshot.data![index];
-                return ListTile(
-                  title: Text(model.title),
-                  subtitle: Text('Falta ${model.typeDescription}'),
-                  trailing: Container(
-                    child: Center(
-                        child: Text(
-                      '${model.typeValue}',
-                      style: TextStyle(
-                          color: model.typeValue! < 4
-                              ? Colors.black
-                              : Colors.white),
-                    )),
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: model.typeColor,
-                      borderRadius: BorderRadius.circular(20),
+                return Dismissible(
+                  key: Key(model.id),
+                  onDismissed: (direction) {
+                    controller.removePenalty(context, model);
+                  },
+                  child: ListTile(
+                    title: Text(model.title),
+                    subtitle: Text('Falta ${model.typeDescription}'),
+                    trailing: Container(
+                      child: Center(
+                          child: Text(
+                        '${model.typeValue}',
+                        style: TextStyle(
+                            color: model.typeValue! < 4
+                                ? Colors.black
+                                : Colors.white),
+                      )),
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: model.typeColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
                   ),
                 );

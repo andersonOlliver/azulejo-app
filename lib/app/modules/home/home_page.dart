@@ -1,14 +1,10 @@
-import 'package:azulejo/app/core/database/box_name.dart';
-import 'package:azulejo/app/modules/home/widgtes/to_interview_list_widget.dart';
+import 'package:azulejo/app/modules/interview/model/type_penalty_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import 'home_controller.dart';
 import 'model/candidate_model.dart';
-import 'widgtes/interview_list_widget.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -41,19 +37,14 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               ),
             ),
           ),
-          ToInterviewList(),
+          _toInterview(),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
                 Text('Entrevistados'),
                 Divider(),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [_interviewedList()],
-                // ),
-                // _interviewedList(),
-                InterviewList(),
+                _intervieweds(),
               ],
             ),
           ),
@@ -63,54 +54,75 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     ));
   }
 
-  // Widget _toInterviewList() => Observer(
-  //       builder: (context) {
-  //         if (controller.toInterview == null) {
-  //           return Center(
-  //             child: CircularProgressIndicator(),
-  //           );
-  //         } else {
-  //           return ListView.builder(
-  //             shrinkWrap: true,
-  //             itemCount: controller.toInterview!.length,
-  //             itemBuilder: (context, index) {
-  //               var model = controller.toInterview![index];
-  //               return ListTile(
-  //                 title: Text(model.name),
-  //                 subtitle: Text('Sem assinatura'),
-  //                 onTap: () {
-  //                   Modular.to.pushNamed('/interview', arguments: model);
-  //                 },
-  //               );
-  //             },
-  //           );
-  //         }
-  //       },
-  //     );
+  Observer _intervieweds() {
+    return Observer(builder: (_) {
+      return StreamBuilder(
+        stream: controller.intervieweds,
+        builder: (context, AsyncSnapshot<List<Candidate>> snapshot) {
+          if (!snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(child: Text('Nenhum candidato encontrado')),
+            );
+          } else {
+            var sum = snapshot.data!
+                .map((e) => e.penalties
+                    ?.toList()
+                    .map((p) => p.typeValue)
+                    .reduce((value, element) => value! + element!))
+                .toList();
+            print(sum);
+            print(snapshot.data!);
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              shrinkWrap: true,
+              physics: AlwaysScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                var model = snapshot.data![index];
+                return ListTile(
+                  title: Text(model.name),
+                  trailing: Icon(
+                    Icons.circle,
+                    color: getColorByValue(sum[index] ?? 0),
+                  ),
+                );
+              },
+            );
+          }
+        },
+      );
+    });
+  }
 
-  // Widget _interviewedList() => Observer(
-  //       builder: (context) {
-  //         if (controller.interviewed == null) {
-  //           return Center(
-  //             child: CircularProgressIndicator(),
-  //           );
-  //         } else {
-  //           return ListView.builder(
-  //             shrinkWrap: true,
-  //             itemCount: controller.interviewed!.length,
-  //             itemBuilder: (context, index) {
-  //               var model = controller.interviewed![index];
-  //               return ListTile(
-  //                 title: Text(model.name),
-  //                 trailing: Icon(
-  //                   Icons.circle,
-  //                   // color: ,
-  //                   // if(color: Ty,)
-  //                 ),
-  //               );
-  //             },
-  //           );
-  //         }
-  //       },
-  //     );
+  Observer _toInterview() {
+    return Observer(builder: (_) {
+      return StreamBuilder(
+        stream: controller.toInterview,
+        builder: (context, AsyncSnapshot<List<Candidate>> snapshot) {
+          if (!snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(child: Text('Nenhum candidato encontrado')),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              shrinkWrap: true,
+              physics: AlwaysScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                var model = snapshot.data![index];
+                return ListTile(
+                  title: Text(model.name),
+                  subtitle: Text('Sem assinatura'),
+                  onTap: () {
+                    Modular.to.pushNamed('/interview', arguments: model);
+                  },
+                );
+              },
+            );
+          }
+        },
+      );
+    });
+  }
 }

@@ -7,7 +7,8 @@ part of 'interview_service.dart';
 // **************************************************************************
 
 final $InterviewService = BindInject(
-  (i) => InterviewService(i<CandidateRepository>(), i<PenaltyRepository>()),
+  (i) => InterviewService(
+      i<CandidateRepository>(), i<PenaltyRepository>(), i<CandidateStore>()),
   isSingleton: true,
   isLazy: true,
 );

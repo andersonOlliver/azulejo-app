@@ -29,6 +29,14 @@ abstract class _InterviewControllerBase with Store {
   }
 
   @action
+  void removePenalty(BuildContext context, Penalty penalty) {
+    this.interviewService.removePenalty(penalty);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('${penalty.title} foi removido')),
+    );
+  }
+
+  @action
   void addPenalty(BuildContext context) {
     print('Adicionar penalidade');
     Modal().mainBottomSheet(

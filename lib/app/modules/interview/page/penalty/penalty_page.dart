@@ -26,9 +26,9 @@ class PenaltyPageState extends ModularState<PenaltyPage, PenaltyController> {
         title:
             Text('Penalidade ${typePenaltyDescription[widget.typePenalty]!}'),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.edit),
+          Observer(
+            builder: (context) =>
+                controller.isEditing ? _saveButton() : _editButton(),
           )
         ],
       ),
@@ -37,11 +37,20 @@ class PenaltyPageState extends ModularState<PenaltyPage, PenaltyController> {
           itemCount: controller.penalties.length,
           itemBuilder: (context, index) {
             var model = controller.penalties[index];
+            if (controller.isEditing) {
+              return ListTile(
+                title: TextFormField(
+                  initialValue: model.title,
+                  onFieldSubmitted: (value) {},
+                ),
+              );
+            }
             return ListTile(
               title: Text(model.title),
+              // leading: Icon(Icons.check_circle_outline_sharp),
               leading: Radio<Penalty>(
                 value: controller.penalties[index],
-                groupValue: controller.penalties[0],
+                groupValue: null,
                 onChanged: (penalty) => controller.addPenalty(model),
               ),
               onTap: () => controller.addPenalty(model),
@@ -49,6 +58,20 @@ class PenaltyPageState extends ModularState<PenaltyPage, PenaltyController> {
           },
         ),
       ),
+    );
+  }
+
+  Widget _editButton() {
+    return IconButton(
+      onPressed: controller.edit,
+      icon: Icon(Icons.edit),
+    );
+  }
+
+  Widget _saveButton() {
+    return IconButton(
+      onPressed: controller.edit,
+      icon: Icon(Icons.check),
     );
   }
 }

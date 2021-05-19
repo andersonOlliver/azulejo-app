@@ -49,6 +49,21 @@ mixin _$PenaltyController on _PenaltyControllerBase, Store {
     });
   }
 
+  final _$isEditingAtom = Atom(name: '_PenaltyControllerBase.isEditing');
+
+  @override
+  bool get isEditing {
+    _$isEditingAtom.reportRead();
+    return super.isEditing;
+  }
+
+  @override
+  set isEditing(bool value) {
+    _$isEditingAtom.reportWrite(value, super.isEditing, () {
+      super.isEditing = value;
+    });
+  }
+
   final _$getDataAsyncAction = AsyncAction('_PenaltyControllerBase.getData');
 
   @override
@@ -71,6 +86,17 @@ mixin _$PenaltyController on _PenaltyControllerBase, Store {
   }
 
   @override
+  void updatePenalty(String value, Penalty penalty) {
+    final _$actionInfo = _$_PenaltyControllerBaseActionController.startAction(
+        name: '_PenaltyControllerBase.updatePenalty');
+    try {
+      return super.updatePenalty(value, penalty);
+    } finally {
+      _$_PenaltyControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addPenalty(Penalty penalty) {
     final _$actionInfo = _$_PenaltyControllerBaseActionController.startAction(
         name: '_PenaltyControllerBase.addPenalty');
@@ -82,10 +108,22 @@ mixin _$PenaltyController on _PenaltyControllerBase, Store {
   }
 
   @override
+  void edit() {
+    final _$actionInfo = _$_PenaltyControllerBaseActionController.startAction(
+        name: '_PenaltyControllerBase.edit');
+    try {
+      return super.edit();
+    } finally {
+      _$_PenaltyControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 penalties: ${penalties},
-type: ${type}
+type: ${type},
+isEditing: ${isEditing}
     ''';
   }
 }

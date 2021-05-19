@@ -6,7 +6,10 @@ import 'modules/interview/interview_module.dart';
 
 class AppModule extends Module {
   @override
-  final List<Bind> binds = [];
+  final List<Bind> binds = [
+    ...HomeModule.export,
+    ...InterviewModule.exports,
+  ];
 
   @override
   final List<ModularRoute> routes = [
