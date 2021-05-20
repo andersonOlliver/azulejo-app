@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:azulejo/app/modules/interview/model/type_penalty_enum.dart';
 import 'package:azulejo/app/modules/interview/services/interview_service.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -11,14 +13,19 @@ part 'penalty_controller.g.dart';
 @Injectable()
 class PenaltyController = _PenaltyControllerBase with _$PenaltyController;
 
-abstract class _PenaltyControllerBase with Store {
+abstract class _PenaltyControllerBase with Store implements Disposable {
   final PenaltyRepository _penaltyRepository;
   final InterviewService _interviewService;
+  Timer? _debounce;
+
   @observable
   List<Penalty> penalties = [];
 
   @observable
   TypePenalty? type;
+
+  @observable
+  int indexEdit = -1;
 
   @observable
   bool isEditing = false;
@@ -37,9 +44,15 @@ abstract class _PenaltyControllerBase with Store {
   }
 
   @action
-  void updatePenalty(String value, Penalty penalty) {
-    var copy = penalty.copyWith(title: value);
-    this._penaltyRepository.update(copy);
+  Future<void> updatePenalty(String value, Penalty penalty) async {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      print('atualizando');
+      var copy = penalty.copyWith(title: value);
+      await this._penaltyRepository.update(copy);
+      await this.getData();
+    });
+
     // this.edit();
   }
 
@@ -54,5 +67,23 @@ abstract class _PenaltyControllerBase with Store {
   @action
   void edit() {
     this.isEditing = !this.isEditing;
+    this.indexEdit = -1;
+  }
+
+  @action
+  Future<void> delete(Penalty penalty) async {
+    await this._penaltyRepository.delete(penalty);
+    await this.getData();
+    this.indexEdit = -1;
+  }
+
+  @action
+  void setEditItem(int index) {
+    this.indexEdit = index;
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
   }
 }

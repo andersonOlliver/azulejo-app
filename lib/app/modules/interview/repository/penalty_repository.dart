@@ -25,6 +25,11 @@ class PenaltyRepository implements Disposable {
     }
   }
 
+  Future<Penalty?> get(String key) async {
+    await open();
+    return _box!.get(key);
+  }
+
   Future<List<Penalty>> list() async {
     await open();
     return _box!.values.toList();
@@ -46,5 +51,10 @@ class PenaltyRepository implements Disposable {
   @override
   void dispose() {
     _box?.close();
+  }
+
+  Future<void> delete(Penalty penalty) async {
+    await open();
+    _box!.delete(penalty.key);
   }
 }

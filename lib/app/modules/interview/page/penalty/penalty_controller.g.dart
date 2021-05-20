@@ -49,6 +49,21 @@ mixin _$PenaltyController on _PenaltyControllerBase, Store {
     });
   }
 
+  final _$indexEditAtom = Atom(name: '_PenaltyControllerBase.indexEdit');
+
+  @override
+  int get indexEdit {
+    _$indexEditAtom.reportRead();
+    return super.indexEdit;
+  }
+
+  @override
+  set indexEdit(int value) {
+    _$indexEditAtom.reportWrite(value, super.indexEdit, () {
+      super.indexEdit = value;
+    });
+  }
+
   final _$isEditingAtom = Atom(name: '_PenaltyControllerBase.isEditing');
 
   @override
@@ -71,6 +86,22 @@ mixin _$PenaltyController on _PenaltyControllerBase, Store {
     return _$getDataAsyncAction.run(() => super.getData());
   }
 
+  final _$updatePenaltyAsyncAction =
+      AsyncAction('_PenaltyControllerBase.updatePenalty');
+
+  @override
+  Future<void> updatePenalty(String value, Penalty penalty) {
+    return _$updatePenaltyAsyncAction
+        .run(() => super.updatePenalty(value, penalty));
+  }
+
+  final _$deleteAsyncAction = AsyncAction('_PenaltyControllerBase.delete');
+
+  @override
+  Future<void> delete(Penalty penalty) {
+    return _$deleteAsyncAction.run(() => super.delete(penalty));
+  }
+
   final _$_PenaltyControllerBaseActionController =
       ActionController(name: '_PenaltyControllerBase');
 
@@ -80,17 +111,6 @@ mixin _$PenaltyController on _PenaltyControllerBase, Store {
         name: '_PenaltyControllerBase.setType');
     try {
       return super.setType(type);
-    } finally {
-      _$_PenaltyControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void updatePenalty(String value, Penalty penalty) {
-    final _$actionInfo = _$_PenaltyControllerBaseActionController.startAction(
-        name: '_PenaltyControllerBase.updatePenalty');
-    try {
-      return super.updatePenalty(value, penalty);
     } finally {
       _$_PenaltyControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -119,10 +139,22 @@ mixin _$PenaltyController on _PenaltyControllerBase, Store {
   }
 
   @override
+  void setEditItem(int index) {
+    final _$actionInfo = _$_PenaltyControllerBaseActionController.startAction(
+        name: '_PenaltyControllerBase.setEditItem');
+    try {
+      return super.setEditItem(index);
+    } finally {
+      _$_PenaltyControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 penalties: ${penalties},
 type: ${type},
+indexEdit: ${indexEdit},
 isEditing: ${isEditing}
     ''';
   }

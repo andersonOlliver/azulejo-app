@@ -33,32 +33,82 @@ class PenaltyPageState extends ModularState<PenaltyPage, PenaltyController> {
         ],
       ),
       body: Observer(
-        builder: (context) => ListView.builder(
-          itemCount: controller.penalties.length,
-          itemBuilder: (context, index) {
-            var model = controller.penalties[index];
-            if (controller.isEditing) {
-              return ListTile(
-                title: TextFormField(
-                  initialValue: model.title,
-                  onFieldSubmitted: (value) {},
-                ),
+          builder: (context) =>
+              controller.isEditing ? _editPenalties() : _listPenalties()
+          // ListView.builder(
+          //   itemCount: controller.penalties.length,
+          //   itemBuilder: (context, index) {
+          //     var model = controller.penalties[index];
+          //     if (controller.isEditing) {
+          //       return ListTile(
+          //         title: TextFormField(
+          //           initialValue: model.title,
+          //           onFieldSubmitted: (value) {},
+          //         ),
+          //       );
+          //     }
+          //     return ListTile(
+          //       title: Text(model.title),
+          //       // leading: Icon(Icons.check_circle_outline_sharp),
+          //       leading: Radio<Penalty>(
+          //         value: controller.penalties[index],
+          //         groupValue: null,
+          //         onChanged: (penalty) => controller.addPenalty(model),
+          //       ),
+          //       onTap: () => controller.addPenalty(model),
+          //     );
+          //   },
+          // ),
+          ),
+    );
+  }
+
+  ListView _editPenalties() {
+    return ListView.builder(
+      itemCount: controller.penalties.length,
+      itemBuilder: (context, index) {
+        var model = controller.penalties[index];
+        return ListTile(
+          title: Observer(builder: (_) {
+            if (index == controller.indexEdit) {
+              return TextFormField(
+                initialValue: model.title,
+                onChanged: (value) {
+                  controller.updatePenalty(value, model);
+                },
               );
             }
-            return ListTile(
-              title: Text(model.title),
-              // leading: Icon(Icons.check_circle_outline_sharp),
-              leading: Radio<Penalty>(
-                value: controller.penalties[index],
-                groupValue: null,
-                onChanged: (penalty) => controller.addPenalty(model),
-              ),
-              onTap: () => controller.addPenalty(model),
+            return InkWell(
+              child: Text(model.title),
+              onTap: () => controller.setEditItem(index),
             );
-          },
-        ),
-      ),
+          }),
+          // leading: Icon(Icons.check_circle_outline_sharp),
+          trailing: IconButton(
+            icon: Icon(Icons.close_rounded),
+            onPressed: () => controller.delete(model),
+          ),
+        );
+      },
     );
+  }
+
+  ListView _listPenalties() {
+    return ListView.builder(
+        itemCount: controller.penalties.length,
+        itemBuilder: (context, index) {
+          var model = controller.penalties[index];
+          return ListTile(
+            title: Text(model.title),
+            // leading: Icon(Icons.check_circle_outline_sharp),
+            leading: Radio<Penalty>(
+              value: controller.penalties[index],
+              groupValue: null,
+              onChanged: (penalty) => controller.addPenalty(model),
+            ),
+            onTap: () => controller.addPenalty(model),
+          );
+        });
   }
 
   Widget _editButton() {
